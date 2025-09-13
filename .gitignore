@@ -1,0 +1,53 @@
+# Environment variables
+.env
+.env.local
+.env.production
+.env.staging
+
+# System service files
+*.service
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.coverage
+.pytest_cache/
+venv/
+env/
+.venv/
+.env/
+
+# Logs
+logs/
+*.log
+
+# Bot data
+guild_settings.json
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp

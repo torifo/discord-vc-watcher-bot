@@ -14,13 +14,20 @@ from datetime import datetime, timedelta
 from typing import Dict, Set, Optional
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# 環境変数を読み込み
+load_dotenv()
 
 # ロギング設定
+log_dir = Path(__file__).parent / "logs"
+log_dir.mkdir(exist_ok=True)
+
 logging.basicConfig(
-    level=logging.INFO,
+    level=getattr(logging, os.getenv('LOG_LEVEL', 'INFO').upper()),
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('/opt/discord-vc-bot/logs/bot.log'),
+        logging.FileHandler(log_dir / 'bot.log'),
         logging.StreamHandler()
     ]
 )

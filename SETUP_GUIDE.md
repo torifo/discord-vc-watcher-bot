@@ -61,23 +61,25 @@ OAuth2 > URL Generatorで以下を選択:
 git clone https://github.com/yourusername/discord-vc-bot.git
 cd discord-vc-bot
 
-# 2. セットアップスクリプトを実行
-chmod +x setup.sh
-sudo ./setup.sh
+# 2. 仮想環境を作成して依存関係をインストール
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
 
 # 3. Botトークンを設定
-sudo nano /etc/systemd/system/discord-vc-bot.service
-# YOUR_BOT_TOKEN_HERE を実際のトークンに置き換え
-
-# または.envファイルを使用
-sudo nano /opt/discord-vc-bot/.env
+nano .env
 # DISCORD_BOT_TOKEN=your_actual_token_here
 
-# 4. サービスを開始
+# 4. systemdサービスファイルをコピー
+sudo cp discord-vc-bot.service /etc/systemd/system/
+sudo systemctl daemon-reload
+
+# 5. サービスを開始
 sudo systemctl start discord-vc-bot
 sudo systemctl enable discord-vc-bot
 
-# 5. ログを確認
+# 6. ログを確認
 sudo journalctl -u discord-vc-bot -f
 ```
 
@@ -161,14 +163,14 @@ sudo journalctl -u discord-vc-bot -n 50
 ### ログローテーション
 ```bash
 # /etc/logrotate.d/discord-vc-bot
-/opt/discord-vc-bot/logs/*.log {
+/home/ubuntu/Bot/discord/vc-watcher/logs/*.log {
     daily
     rotate 7
     compress
     delaycompress
     missingok
     notifempty
-    create 644 discord-bot discord-bot
+    create 644 ubuntu ubuntu
 }
 ```
 
@@ -180,10 +182,11 @@ sudo journalctl -u discord-vc-bot -n 50
 sudo systemctl stop discord-vc-bot
 
 # ファイルを更新
-sudo cp new_bot.py /opt/discord-vc-bot/bot.py
+cp new_bot.py /home/ubuntu/Bot/discord/vc-watcher/bot.py
 
 # 依存関係を更新
-sudo -u discord-bot /opt/discord-vc-bot/venv/bin/pip install -r /opt/discord-vc-bot/requirements.txt
+source /home/ubuntu/Bot/discord/vc-watcher/venv/bin/activate
+pip install -r /home/ubuntu/Bot/discord/vc-watcher/requirements.txt
 
 # Botを再起動
 sudo systemctl start discord-vc-bot
@@ -192,7 +195,7 @@ sudo systemctl start discord-vc-bot
 ### バックアップ
 ```bash
 # 設定ファイルのバックアップ
-sudo cp /opt/discord-vc-bot/guild_settings.json /opt/discord-vc-bot/guild_settings.json.bak
+cp /home/ubuntu/Bot/discord/vc-watcher/guild_settings.json /home/ubuntu/Bot/discord/vc-watcher/guild_settings.json.bak
 ```
 
 ## 今後の拡張予定
